@@ -16,10 +16,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/', async (req, res) => {
-    const response = await fetch('http://localhost:3000/api/concerts');
+
+    const response = await fetch("http://localhost:3000/api/concerts");
     const concerts = await response.json();
 
-    res.render('home', { concerts });
+    res.render('user/home', {
+        title: 'Home',
+        cssFile: 'user/home.css',
+        concerts
+    });
+
 });
 
 // หน้า login
@@ -43,7 +49,6 @@ app.post('/login', async (req, res) => {
         },
         credentials: "include",
         body: new URLSearchParams(req.body),
-        credentials: "include"
     });
 
     const result = await response.json();
@@ -66,32 +71,23 @@ app.get('/register', (req, res) => {
     });
 });
 
-app.post('/api/register', (req, res) => {
+app.post('/register', async (req, res) => {
 
-    const { username, password } = req.body;
+    const response = await fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams(req.body)
+    });
 
-    if (!username || !password) {
-        return res.json({
-            success: false,
-            message: "กรอกข้อมูลให้ครบ"
-        });
+    const result = await response.json();
+
+    if (result.success) {
+        res.redirect('/login');
+    } else {
+        res.redirect('/register');
     }
-
-    db.run(
-        "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-        [username, password, 'user'],
-        function(err) {
-
-            if (err) {
-                return res.json({
-                    success: false,
-                    message: "Username already exists"
-                });
-            }
-
-            res.json({ success: true });
-        }
-    );
 
 });
 
