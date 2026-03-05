@@ -1,0 +1,255 @@
+/* ===== PAGE BASE ===== */
+
+body {
+    margin: 0;
+    font-family: 'Prompt', sans-serif;
+    background: #f4f6f9;
+}
+
+.container {
+    padding: 40px 60px;
+    min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+
+.page-header {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.page-header h1::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #ec4899);
+    margin-top: 8px;
+    border-radius: 4px;
+}
+
+.page-header .subtitle {
+    opacity: 0.75;
+    font-size: 14px;
+}
+
+.page-header::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+    top: -60px;
+    right: -60px;
+}
+
+.subtitle {
+    margin-top: 6px;
+    color: #666;
+    font-size: 14px;
+}
+/* จัดตำแหน่ง container */
+.header-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+/* ปุ่ม */
+.add-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background: black;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.25);
+}
+
+/* Hover */
+.add-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(13, 13, 14, 0.35);
+}
+
+/* ตอนกด */
+.add-btn:active {
+    transform: scale(0.97);
+}
+.add-btn .icon {
+    margin-right: 6px;
+    font-size: 16px;
+}
+
+/* ===== TABLE WRAPPER ===== */
+
+.table-wrapper {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+
+/* ===== TABLE ===== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #f3f4f6;
+    color: #111827;
+    padding: 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+td {
+    padding: 18px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f1f1;
+    vertical-align: middle;
+    text-align: center;
+}
+
+tr {
+    transition: 0.2s ease;
+}
+
+tr:hover {
+    background: #f9fafb;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===== POSTER ===== */
+
+.poster-img {
+    width: 95px;
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.no-image {
+    width: 95px;
+    height: 130px;
+    background: #eee;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #777;
+}
+
+.poster-img,
+.no-image {
+    display: block;
+    margin: 0 auto;
+}
+
+/* ===== CONCERT NAME ===== */
+
+.concert-name {
+    text-align: left;
+}
+
+.concert-name strong {
+    font-size: 15px;
+}
+
+/* ===== ROUND BADGE ===== */
+
+.round-badge {
+    background: #e6f7ec;
+    color: #1b7f46;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ===== ACTION BUTTONS ===== */
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.edit-btn {
+    padding: 7px 14px;
+    border-radius: 8px;
+    background: #1f2937;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.edit-btn:hover {
+    background: #ff2e63;
+}
+
+.delete-btn {
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: none;
+    background: #ef4444;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.delete-btn:hover {
+    opacity: 0.85;
+}
+
+/* ===== EMPTY STATE ===== */
+
+.empty-state {
+    text-align: center;
+    padding: 50px;
+    color: #999;
+    font-style: italic;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 900px) {
+    .container {
+        padding: 25px;
+    }
+
+    .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    .poster-img,
+    .no-image {
+        width: 75px;
+    }
+}

@@ -1,0 +1,80 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background: #000000; /* พื้นหลังดำ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #ffffff; /* การ์ดขาว */
+    padding: 45px 40px;
+    width: 360px;
+    border-radius: 18px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+.container h2 {
+    margin-bottom: 25px;
+    color: #111111;
+    font-weight: 600;
+}
+
+form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #e5e5e5;
+    background: #fafafa;
+    color: #111111;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+form input:focus {
+    border-color: #000000;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    background: #222222;
+    transform: translateY(-2px);
+}
+
+p {
+    margin-top: 18px;
+    font-size: 14px;
+    color: #555555;
+}
+
+a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#error {
+    color: #e53935;
+    margin-top: 10px;
+    font-size: 13px;
+}

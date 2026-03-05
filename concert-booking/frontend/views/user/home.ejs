@@ -1,0 +1,67 @@
+<div class="navbar">
+    <div class="logo">THE CONCERT</div>
+    <div class="nav-links"></div>
+</div>
+
+<div class="container">
+    <div class="title">DISCOVER CONCERTS</div>
+
+    <div class="concert-grid">
+        <% concerts.forEach(concert => { %>
+            <div class="card">
+                <img src="http://localhost:3000/uploads/<%= concert.image %>" alt="">
+                <div class="card-content">
+                    <h3><%= concert.name %></h3>
+                    <p><%= concert.artist %></p>
+                    <p>📍 <%= concert.location %></p>
+                    <p>
+                        📅 
+                        <%= new Date(concert.start_date).toLocaleDateString('th-TH') %>
+                        -
+                        <%= new Date(concert.end_date).toLocaleDateString('th-TH') %>
+                    </p>
+                    <br><br>
+                    <a href="/concert/<%= concert.id %>" class="button">
+                        ดูรอบการแสดง
+                    </a>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<script>
+async function checkLogin() {
+
+    const response = await fetch("http://localhost:3000/api/me", {
+        credentials: "include"
+    });
+
+    const data = await response.json();
+    const nav = document.querySelector(".nav-links");
+
+    if (data.loggedIn) {
+        nav.innerHTML = `
+            <span>สวัสดี ${data.user.username}</span>
+            <a href="/my-bookings">ประวัติการจอง</a>
+            <a href="#" id="logoutBtn">ออกจากระบบ</a>
+        `;
+
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            await fetch("http://localhost:3000/api/logout", {
+                method: "POST",
+                credentials: "include"
+            });
+
+            window.location.href = "/login";
+        });
+
+    } else {
+        nav.innerHTML = `
+            <a href="/login">เข้าสู่ระบบ</a>
+        `;
+    }
+}
+
+checkLogin();
+</script>

@@ -1,0 +1,216 @@
+<div class="concert-header">
+    <h1><%= concert.name %></h1>
+</div>
+
+<div class="tabs">
+    <button class="active" onclick="showTab(event,'info')">
+        ข้อมูลคอนเสิร์ต
+    </button>
+
+    <button onclick="showTab(event,'rounds')">
+        รอบการแสดง
+    </button>
+</div>
+
+<!-- TAB 1 -->
+<div id="info" class="tab-content">
+
+    <form method="POST" 
+        action="/admin/concerts/update/<%= concert.id %>" 
+        enctype="multipart/form-data">
+
+        <label>ชื่อ</label>
+        <input type="text" name="name" value="<%= concert.name %>">
+
+        <label>ศิลปิน</label>
+        <input type="text" name="artist" value="<%= concert.artist %>">
+
+        <label for="location">สถานที่จัดคอนเสิร์ต</label>
+        <input type="text" id="location" name="location" placeholder="เช่น Impact Arena เมืองทองธานี" required>
+
+
+        <label>รายละเอียด</label>
+        <textarea name="description"><%= concert.description %></textarea>
+
+        <label>วันที่เริ่ม</label>
+        <input type="date" name="start_date" value="<%= concert.start_date %>">
+
+        <label>วันที่สิ้นสุด</label>
+        <input type="date" name="end_date" value="<%= concert.end_date %>">
+        <label>รูปปัจจุบัน</label><br>
+
+        <img id="previewImage"
+            src="/uploads/<%= concert.image %>"
+            width="150"><br><br>
+
+        <label>เปลี่ยนรูป</label>
+        <input type="file" name="image" id="imageInput" accept="image/*">
+
+        <button type="submit">บันทึกข้อมูลหลัก</button>
+
+    </form>
+
+</div>
+
+<!-- TAB 2 -->
+<div id="rounds" class="tab-content" style="display:none;">
+
+    <div class="rounds-header">
+        <h3>รอบการแสดง</h3>
+        <button class="btn-primary" onclick="openAddModal()">
+            ➕ เพิ่มรอบ
+        </button>
+    </div>
+
+    <div class="rounds-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>วันที่</th>
+                    <th>เวลา</th>
+                    <th>ที่นั่ง</th>
+                    <th>ราคา</th>
+                    <th>จัดการ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% showtimes.forEach(show => { %>
+                <tr>
+                    <td><%= show.show_date %></td>
+                    <td><%= show.show_time %></td>
+                    <td><%= show.total_seats %></td>
+                    <td><%= show.price %> บาท</td>
+                    <td class="actions">
+                        <button type="button"
+                            class="btn-edit"
+                            onclick="openEditModal(
+                                <%= show.id %>,
+                                '<%= show.show_date %>',
+                                '<%= show.show_time %>',
+                                <%= show.total_seats %>,
+                                <%= show.price %>
+                            )">
+                            แก้ไข
+                        </button>
+
+                        <form action="/admin/showtimes/delete/<%= show.id %>" 
+                              method="POST">
+                            <button type="submit" class="btn-delete">
+                                ลบ
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+function showTab(e, tab) {
+
+    document.getElementById("info").style.display = "none";
+    document.getElementById("rounds").style.display = "none";
+
+    document.querySelectorAll(".tabs button")
+        .forEach(btn => btn.classList.remove("active"));
+
+    document.getElementById(tab).style.display = "block";
+
+    if (e) {
+        e.currentTarget.classList.add("active");
+    }
+}
+</script>
+
+<div id="editModal" class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3>แก้ไขรอบการแสดง</h3>
+
+        <form method="POST" id="editForm">
+
+            <label>วันที่</label>
+            <input type="date" name="show_date" id="modal_date" required>
+
+            <label>เวลา</label>
+            <input type="time" name="show_time" id="modal_time" required>
+
+            <label>ที่นั่ง</label>
+            <input type="number" name="total_seats" id="modal_seats" required>
+
+            <label>ราคา</label>
+            <input type="number" name="price" id="modal_price" required>
+
+            <div class="modal-actions">
+                <button type="submit" class="btn-primary">บันทึก</button>
+                <button type="button" onclick="closeModal()" class="btn-cancel">ยกเลิก</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+function openAddModal() {
+
+    document.getElementById("editModal").style.display = "flex";
+
+    document.getElementById("modal_date").value = "";
+    document.getElementById("modal_time").value = "";
+    document.getElementById("modal_seats").value = "";
+    document.getElementById("modal_price").value = "";
+
+    document.getElementById("editForm").action =
+        "/admin/showtimes/create/<%= concert.id %>";
+}
+</script>
+
+
+<script>
+function openEditModal(id, date, time, seats, price) {
+    document.getElementById("editModal").style.display = "flex";
+    document.getElementById("modal_date").value = date;
+    document.getElementById("modal_time").value = time;
+    document.getElementById("modal_seats").value = seats;
+    document.getElementById("modal_price").value = price;
+
+    document.getElementById("editForm").action =
+        "/admin/showtimes/update/" + id;
+}
+
+
+
+
+function closeModal() {
+    document.getElementById("editModal").style.display = "none";
+}
+</script>
+
+
+
+
+<script>
+const imageInput = document.getElementById("imageInput");
+const previewImage = document.getElementById("previewImage");
+
+imageInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+</script>

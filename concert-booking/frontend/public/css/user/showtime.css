@@ -1,0 +1,103 @@
+body {
+    margin: 0;
+    font-family: 'Prompt', sans-serif;
+    background: #f4f6f9;
+    padding: 40px;
+}
+
+.showtime-page {
+    background: #f8f9fb;
+    padding: 80px 20px;
+    font-family: 'Prompt', sans-serif;
+}
+
+/* TITLE */
+
+.showtime-page .page-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 50px;
+    letter-spacing: 0.5px;
+}
+
+/* CONTAINER */
+
+.showtime-page .showtime-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+/* CARD */
+
+.showtime-page .showtime-card {
+    width: 480px;
+    max-width: 95%;
+    background: #ffffff;
+    padding: 30px 35px;
+    border-radius: 14px;
+    border: 1px solid #eee;
+    transition: 0.25s ease;
+}
+
+.showtime-page .showtime-card:hover {
+    border-color: #dcdcdc;
+}
+
+/* TEXT */
+
+.showtime-page .showtime-card p {
+    margin: 8px 0;
+    font-size: 15px;
+    color: #444;
+}
+
+.showtime-page .price {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111;
+    margin-top: 10px;
+}
+
+/* STATUS */
+
+.showtime-page .available {
+    color: #555;
+    font-size: 14px;
+}
+
+.showtime-page .soldout {
+    color: #999;
+    font-size: 14px;
+}
+
+/* BUTTON */
+
+.showtime-page .btn-book {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 10px 20px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: 0.25s ease;
+}
+
+.showtime-page .btn-book:hover {
+    background: #333;
+}
+
+/* BACK */
+
+.showtime-page .back-btn {
+    display: block;
+    text-align: center;
+    margin-top: 50px;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}

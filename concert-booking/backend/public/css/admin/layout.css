@@ -1,0 +1,64 @@
+/* ===== RESET ===== */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #f4f6f9;
+    display: flex;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background: linear-gradient(145deg, #1e1f25, #2a2c35);
+    color: white;
+    padding: 30px 20px;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    position: fixed;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin-bottom: 12px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #d1d5db;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.08);
+    color: white;
+}
+
+.sidebar a.active {
+    background: linear-gradient(90deg, #6366f1, #ec4899);
+    color: white;
+}
+
+/* ===== MAIN AREA ===== */
+.main {
+    margin-left: 240px;
+    width: calc(100% - 240px);
+}
+
+.content {
+    padding: 40px 50px;
+}

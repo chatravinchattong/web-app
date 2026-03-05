@@ -1,0 +1,106 @@
+<div class="container">
+
+    <!-- ===== HEADER ===== -->
+     <div class="page-header">
+        <div>
+            <h1>จัดการคอนเสิร์ต</h1>
+            <p class="subtitle">เพิ่ม แก้ไข หรือลบข้อมูลคอนเสิร์ตในระบบ</p>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="header-btn">
+        <a href="/admin/concerts/add" class="add-btn">
+            <span class="icon">＋</span> เพิ่มคอนเสิร์ต
+        </a>
+    </div>
+
+    <!-- ===== TABLE ===== -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>โปสเตอร์</th>
+                    <th>ชื่อคอนเสิร์ต</th>
+                    <th>ศิลปิน</th>
+                    <th>สถานที่</th>
+                    <th>วันที่จัด</th>
+                    <th>จำนวนรอบ</th>
+                    <th>จัดการ</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% if (concerts.length === 0) { %>
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            ยังไม่มีคอนเสิร์ตในระบบ
+                        </td>
+                    </tr>
+                <% } %>
+
+                <% concerts.forEach(concert => { %>
+                <tr>
+
+                    <!-- Poster -->
+                    <td>
+                        <% if (concert.image) { %>
+                            <img src="/uploads/<%= concert.image %>" class="poster-img">
+                        <% } else { %>
+                            <div class="no-image">ไม่มีรูป</div>
+                        <% } %>
+                    </td>
+
+                    <!-- Name -->
+                    <td class="concert-name">
+                        <strong><%= concert.name %></strong>
+                    </td>
+
+                    <!-- Artist -->
+                    <td><%= concert.artist %></td>
+
+                    <!-- Location -->
+                    <td><%= concert.location %></td>
+
+                    <!-- Date -->
+                    <td>
+                        <%= concert.start_date %> 
+                        <% if (concert.end_date !== concert.start_date) { %>
+                            - <%= concert.end_date %>
+                        <% } %>
+                    </td>
+
+                    <!-- Round Count -->
+                    <td>
+                        <span class="round-badge">
+                            <%= concert.round_count %> รอบ
+                        </span>
+                    </td>
+
+                    <!-- Actions -->
+                    <td>
+                        <div class="action-buttons">
+
+                            <a href="/admin/concerts/edit/<%= concert.id %>" class="edit-btn">
+                                แก้ไข
+                            </a>
+
+                            <form action="/admin/concerts/delete/<%= concert.id %>" 
+                                method="POST">
+                                <button type="submit" 
+                                        class="delete-btn"
+                                        onclick="return confirm('ยืนยันการลบคอนเสิร์ตนี้?')">
+                                    ลบ
+                                </button>
+                            </form>
+
+                        </div>
+                    </td>
+
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+</div>

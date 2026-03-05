@@ -1,0 +1,212 @@
+<div class="dashboard-page">
+
+    <!-- ================= HEADER ================= -->
+    <div class="page-header">
+        <div>
+            <h1>แดชบอร์ดภาพรวมระบบ</h1>
+            <p class="subtitle">สรุปภาพรวมการขายและประสิทธิภาพคอนเสิร์ต</p>
+        </div>
+    </div>
+    <br>
+
+
+    <!-- ================= SUMMARY CARDS ================= -->
+    <div class="card-grid">
+
+        <div class="card">
+            <h3>ยอดขายรวม</h3>
+            <p>฿<%= totalRevenue ? totalRevenue.toLocaleString() : 0 %></p>
+        </div>
+
+        <div class="card">
+            <h3>จำนวนคอนเสิร์ต</h3>
+            <p><%= totalConcerts || 0 %></p>
+        </div>
+
+        <div class="card">
+            <h3>จำนวนตั๋วที่ขายไป</h3>
+            <p><%= totalTickets || 0 %></p>
+        </div>
+
+    </div>
+
+
+    <!-- ================= INSIGHT SECTION ================= -->
+    <div class="insight-grid">
+
+        <!-- 🎯 ขายดีที่สุด -->
+        <div class="insight-card success">
+            <h3>คอนเสิร์ตขายดีที่สุด</h3>
+
+            <% if (bestConcert) { %>
+                <p class="insight-title"><%= bestConcert.name %></p>
+                <small>ขายไปแล้ว <%= bestConcert.totalTickets %> ใบ</small>
+
+                <div class="progress-bar">
+                    <span style="width:<%= bestConcert.percent %>%"></span>
+                </div>
+
+                <small><%= bestConcert.percent %>% ของที่นั่งทั้งหมด</small>
+            <% } else { %>
+                <div class="empty-state">ยังไม่มีข้อมูล</div>
+            <% } %>
+        </div>
+
+
+        <!-- ⚠️ ขายต่ำ -->
+        <div class="insight-card danger">
+            <h3>คอนเสิร์ตที่ยอดขายต่ำ</h3>
+
+            <% if (worstConcert) { %>
+                <p class="insight-title"><%= worstConcert.name %></p>
+                <small>ขายไป <%= worstConcert.totalTickets %> ใบ</small>
+
+                <div class="progress-bar">
+                    <span style="width:<%= worstConcert.percent %>%"></span>
+                </div>
+
+                <small><%= worstConcert.percent %>% ของที่นั่งทั้งหมด</small>
+            <% } else { %>
+                <div class="empty-state">ยังไม่มีข้อมูล</div>
+            <% } %>
+        </div>
+
+    </div>
+
+
+    <!-- ================= CHART SECTION ================= -->
+    <div class="chart-row">
+
+        <!-- 📈 รายได้รายเดือน -->
+        <div class="chart-container">
+            <h3>รายได้รายเดือน</h3>
+
+            <% if (monthlySales && monthlySales.length > 0) { %>
+                <canvas id="salesChart"></canvas>
+            <% } else { %>
+                <div class="empty-state">
+                    ยังไม่มีข้อมูลรายได้ในขณะนี้
+                </div>
+            <% } %>
+        </div>
+
+
+        <!-- 🎤 Top 5 -->
+        <div class="chart-container">
+            <h3>5 คอนเสิร์ตยอดนิยม</h3>
+
+            <% if (topConcerts && topConcerts.length > 0) { %>
+                <canvas id="topChart"></canvas>
+            <% } else { %>
+                <div class="empty-state">
+                    ยังไม่มีข้อมูล
+                </div>
+            <% } %>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CHART SCRIPT ================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const monthlyData = <%- JSON.stringify(monthlySales) %>;
+    
+
+    console.log("Monthly:", monthlyData);
+
+    const labels = monthlyData.map(item => item.month || "ไม่ทราบเดือน");
+    const data = monthlyData.map(item => item.total);
+
+    const ctx = document.getElementById('salesChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'รายได้รายเดือน',
+                data: data,
+
+               backgroundColor: 'rgba(30,31,37,0.85)',  // #1e1f25
+                hoverBackgroundColor: '#111827',
+                borderRadius: 8,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    grid: { display: false }
+                },
+                y: {
+                    grid: {
+                        color: '#f1f1f1'
+                    }
+                }
+            }
+        }
+    });
+});
+
+
+
+
+<% if (topConcerts && topConcerts.length > 0) { %>
+new Chart(document.getElementById('topChart'), {
+    type: 'bar',
+    data: {
+        labels: <%- JSON.stringify(
+            topConcerts.map(c => 
+                c.name.length > 18 
+                    ? c.name.substring(0, 18) + '...' 
+                    : c.name
+            )
+        ) %>,
+        datasets: [{
+            label: 'จำนวนตั๋วที่ขาย',
+            data: <%- JSON.stringify(topConcerts.map(c => c.totalTickets)) %>,
+
+            // 🎨 Theme Upgrade
+            backgroundColor: 'rgba(30,31,37,0.85)',  // #1e1f25
+            hoverBackgroundColor: '#111827',
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+            padding: { bottom: 25 }
+        },
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            x: {
+                grid: { display: false },
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 0,
+                    minRotation: 0,
+                    font: { size: 11 }
+                }
+            },
+            y: {
+                grid: {
+                    color: '#f1f1f1'
+                }
+            }
+        }
+    }
+});
+<% } %>
+
+</script>

@@ -1,0 +1,118 @@
+<div class="container">
+
+    <div class="page-header">
+        <div>
+            <h1>รายงานการขายตั๋ว</h1>
+            <p class="subtitle">ภาพรวมธุรกิจและประวัติการจอง</p>
+        </div>
+    </div>
+    <br>
+    <br>
+    <!-- FILTER -->
+    <div class="filter-card">
+        <form method="GET" action="/admin/reports" class="filter-form">
+             <!-- เลือกคอนเสิร์ต -->
+                <div class="input-group">
+                    <label>เลือกคอนเสิร์ต</label>
+                    <select name="concert_id" onchange="this.form.submit()">
+                        <option value="">ทั้งหมด</option>
+                            <% concerts.forEach(c => { %>
+                                <option value="<%= c.id %>" 
+                                    <%= selectedConcert == c.id ? 'selected' : '' %>>
+                                    <%= c.name %>
+                                </option>
+                            <% }) %>
+                    </select>
+                    </div>
+            <!-- เลือกรอบ -->
+                <div class="input-group">
+                    <label>เลือกรอบการแสดง</label>
+                    <select name="showtime_id">
+                        <option value="">ทั้งหมด</option>
+                        <% showtimes.forEach(s => { %>
+                            <option value="<%= s.id %>" 
+                                <%= selectedShowtime == s.id ? 'selected' : '' %>>
+                                <%= s.show_date %> - <%= s.show_time %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+            <!-- วันที่ -->
+            <div class="input-group">
+                <label>จากวันที่</label>
+                <input type="date" name="start" value="<%= start || '' %>">
+            </div>
+
+            <div class="input-group">
+                <label>ถึงวันที่</label>
+                <input type="date" name="end" value="<%= end || '' %>">
+            </div>
+
+            <button type="submit" class="filter-btn">
+                ค้นหา
+            </button>
+        </form>
+    </div>
+<br>
+    <!-- SUMMARY CARDS -->
+    <div class="summary-grid">
+
+        <div class="summary-card">
+            <h3>ตั๋วทั้งหมด</h3>
+            <p class="big-number"><%= totalSeats %></p>
+        </div>
+
+        <div class="summary-card">
+            <h3>ตั๋วที่ขายแล้ว</h3>
+            <p class="big-number"><%= totalTickets %></p>
+        </div>
+
+        <div class="summary-card">
+            <h3>ตั๋วคงเหลือ</h3>
+            <p class="big-number"><%= remainingTickets %></p>
+        </div>
+
+        <div class="summary-card revenue">
+            <h3>รายได้รวม</h3>
+            <p class="big-number"><%= totalRevenue %> บาท</p>
+        </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>ผู้จอง</th>
+                <th>คอนเสิร์ต</th>
+                <th>วันที่แสดง</th>
+                <th>ที่นั่ง</th>
+                <th>จำนวนเงิน</th>
+                <th>สถานะ</th>
+                <th>วันที่จอง</th>
+            </tr>
+
+            <% bookings.forEach(b => { %>
+                <tr>
+                    <td><%= b.username %></td>
+                    <td><%= b.concert_name %></td>
+                    <td><%= b.show_date %></td>
+                    <td><%= b.seat_number %></td>
+                    <td><%= b.amount %> บาท</td>
+                    <td>
+                        <% if (b.payment_status === 'paid') { %>
+                            <span class="status paid">ชำระแล้ว</span>
+                        <% } else { %>
+                            <span class="status pending">รอชำระ</span>
+                        <% } %>
+                    </td>
+                    <td>
+                        <%= new Date(b.booking_date).toLocaleString() %>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+    </div>
+
+</div>

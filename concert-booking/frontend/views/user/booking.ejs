@@ -1,0 +1,94 @@
+<h2 class="page-title">เลือกที่นั่ง</h2>
+
+<form id="booking-form" method="POST" action="/booking/<%= showtimeId %>">
+
+    <div class="booking-layout">
+
+        <!-- ฝั่งซ้าย -->
+        <div class="seat-section">
+            <div class="stage">STAGE</div>
+            <div class="seat-grid">
+                <% if (seats && seats.length > 0) { %>
+                    <% seats.forEach(function(seat) { %>
+                        <div class="seat-item">
+                            <% if (seat.status === 'available') { %>
+                                <input 
+                                    type="checkbox"
+                                    id="seat-<%= seat.id %>"
+                                    name="seat_ids"
+                                    value="<%= seat.id %>"
+                                    hidden
+                                >
+                                <label for="seat-<%= seat.id %>" class="seat available">
+                                    <%= seat.seat_number %>
+                                </label>
+                            <% } else { %>
+                                <div class="seat sold">
+                                    <%= seat.seat_number %>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- ฝั่งขวา -->
+        <div class="summary-section">
+            <div class="summary-box">
+                <h3>สรุปรายการ</h3>
+
+                <p>เลือกแล้ว: <span id="selected-count">0</span> ที่นั่ง</p>
+                <p>ราคาต่อที่นั่ง: <%= price.toLocaleString() %> บาท</p>
+
+                <div class="total-row">
+                    <span>ราคารวม</span>
+                    <span id="total-price">0</span> บาท
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="btn-book"
+                >
+                    จองที่นั่ง
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+<a href="/home" class="back-btn">⬅ กลับหน้าแรก</a>
+
+
+<script>
+    const checkboxes = document.querySelectorAll('input[name="seat_ids"]');
+    const selectedCount = document.getElementById('selected-count');
+    const totalPrice = document.getElementById('total-price');
+    const bookBtn = document.querySelector('.btn-book');
+
+    const pricePerSeat = <%= price %>;
+
+    function updateSummary() {
+        let count = 0;
+
+        checkboxes.forEach(cb => {
+            if (cb.checked) count++;
+        });
+
+        selectedCount.textContent = count;
+        totalPrice.textContent = (count * pricePerSeat).toLocaleString();
+
+        // ปิดปุ่มถ้าไม่มีที่นั่ง
+        bookBtn.disabled = count === 0;
+    }
+
+    // ฟัง event
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', updateSummary);
+    });
+
+    // เรียกครั้งแรกกันพลาด
+    updateSummary();
+</script>

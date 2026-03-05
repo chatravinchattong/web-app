@@ -1,0 +1,61 @@
+<head>
+    <title>MyBooking</title>
+</head>
+<body>
+
+<h2>ประวัติการจองของฉัน</h2>
+
+<% if (bookings.length === 0) { %>
+    <p>คุณยังไม่มีการจอง</p>
+<% } else { %>
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th>คอนเสิร์ต</th>
+        <th>วันที่แสดง</th>
+        <th>เวลา</th>
+        <th>ที่นั่ง</th>
+        <th>จำนวนเงิน</th>
+        <th>สถานะชำระเงิน</th>
+        <th>วันที่จอง</th>
+    </tr>
+
+    <% bookings.forEach(b => { %>
+        <tr>
+            <td><%= b.concert_name %></td>
+            <td><%= b.show_date %></td>
+            <td><%= b.show_time %></td>
+            <td><%= b.seat_number %></td>
+            <td><%= b.amount %> บาท</td>
+            <td>
+                <% if (b.payment_status === 'paid') { %>
+                    <span class="paid">ชำระแล้ว</span>
+                <% } else { %>
+                    <span class="pending">รอชำระ</span>
+                <% } %>
+            </td>
+            <td>
+                <%
+                    const d = new Date(b.booking_date);
+
+                    const day = d.getDate();
+                    const month = d.toLocaleString('th-TH', { month: 'short' });
+                    const year = d.getFullYear() + 543;
+                    const hour = String(d.getHours()).padStart(2, '0');
+                    const minute = String(d.getMinutes()).padStart(2, '0');
+
+                    const thaiDate = `${day} ${month} ${year} เวลา ${hour}:${minute} น.`;
+                %>
+                <%= thaiDate %>
+            </td>
+        </tr>
+    <% }) %>
+
+</table>
+<br>
+<div class="back-home">
+    <a href="/home" class="home-btn">← กลับหน้าแรก</a>
+</div>
+<% } %>
+</body>
+</html>

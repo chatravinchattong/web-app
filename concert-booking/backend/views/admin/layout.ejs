@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= pageTitle %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/admin/layout.css">
+<% if (typeof cssFile !== 'undefined') { %>
+<link rel="stylesheet" href="/css/admin/<%= cssFile %>">
+<% } %>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>🎟 Concert Admin</h2>
+    <ul>
+        <li><a href="/admin/dashboard">Dashboard</a></li>
+        <li><a href="/admin/concerts">Concerts</a></li>
+        <li><a href="/admin/analytics">Analytics</a></li>
+        <li><a href="/admin/reports">ReportTicket</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
+</div>
+
+<div class="main">
+    <div class="content">
+        <%- body %>
+    </div>
+</div>
+<script>
+function logout() {
+    fetch('/api/logout', {
+        method: 'POST',
+        credentials: 'include'
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = 'http://localhost:5000/login';
+        }
+    });
+}
+</script>
+</html>

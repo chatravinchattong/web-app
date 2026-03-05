@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Showtimes</title>
+    <link rel="stylesheet" href="/css/user/showtime.css">
+</head>
+<body class="showtime-page">
+
+<h2 class="page-title">🎭 รอบการแสดงของ <%= concertName %></h2>
+
+<div class="showtime-container">
+<% showtimes.forEach(function(show) { %>
+    <div class="showtime-card">
+        <div class="showtime-info">
+            <p>📅 <%= show.show_date %></p>
+            <p>⏰ <%= show.show_time %></p>
+            <p class="price">💰 <%= show.price.toLocaleString() %> บาท</p>
+
+            <% if (show.available_seats > 0) { %>
+                <p class="available">เหลือที่นั่ง: <%= show.available_seats %></p>
+                <a href="/booking/<%= show.id %>" class="btn-book">
+                    เลือกที่นั่ง
+                </a>
+            <% } else { %>
+                <p class="soldout">(Sold Out)</p>
+            <% } %>
+        </div>
+    </div>
+<% }) %>
+</div>
+
+<a href="/home" class="back-btn">⬅ กลับหน้าแรก</a>
+
+</body>
+</html>

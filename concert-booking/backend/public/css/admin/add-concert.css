@@ -1,0 +1,195 @@
+/* ===== Global Fix ===== */
+* {
+    box-sizing: border-box;
+}
+
+/* ===== Page Wrapper ===== */
+body {
+    font-size: 18px;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    margin: 0;
+}
+
+/* ===== Container ===== */
+.container {
+   max-width: 700px;
+    margin: 0 auto 20px auto;
+    width: 100%;
+}
+
+
+
+/* ===== Title ===== */
+.container h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #2d2d2d;
+    max-width: 700px;
+    margin: 0 auto 20px auto;
+}
+
+/* ===== Step Indicator ===== */
+.steps {
+    margin-bottom: 25px;
+    font-size: 16px;
+    color: #777;
+}
+
+.steps span {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #e5e7eb;
+    font-weight: 500;
+}
+
+.steps .active {
+    background: #6366f1;
+    color: #fff;
+}
+
+/* ===== Card Section ===== */
+#step1,
+#step2 {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    max-width: 700px;
+    margin: 0 auto 20px auto;   /* อยู่กลางจริง */
+}
+
+/* ===== Form Elements ===== */
+label {
+    display: block;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #444;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 16px;
+    background: #f9fafb;
+    transition: 0.2s ease;
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+
+/* ===== Buttons ===== */
+button {
+    margin-top: 20px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+button[type="submit"],
+button[onclick="nextStep()"] {
+    background: #6366f1;
+    color: #fff;
+}
+
+button[type="submit"]:hover,
+button[onclick="nextStep()"]:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+}
+
+button[onclick="prevStep()"] {
+    background: #9ca3af;
+    color: #fff;
+}
+
+button[onclick="prevStep()"]:hover {
+    background: #6b7280;
+}
+
+/* ===== Round Input Layout ===== */
+.round-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+/* ===== Table Styling ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+table th {
+    background: #6366f1;
+    color: #fff;
+    padding: 12px;
+    font-size: 14px;
+    text-align: left;
+}
+
+table td {
+    padding: 12px;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+table button {
+    background: #ef4444;
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+table button:hover {
+    background: #dc2626;
+}
+
+/* ===== Image Preview ===== */
+#previewImage {
+    margin-top: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    #step1,
+    #step2 {
+        max-width: 100%;
+    }
+
+    .round-inputs {
+        grid-template-columns: 1fr;
+    }
+}

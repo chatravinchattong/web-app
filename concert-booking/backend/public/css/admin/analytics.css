@@ -1,0 +1,88 @@
+/* ===== Page Layout ===== */
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f4f6fb;
+    color: #2d2d2d;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+/* ===== Section Divider ===== */
+hr {
+    border: none;
+    height: 1px;
+    background: #e5e7eb;
+    margin: 30px 0;
+}
+
+/* ===== Chart Card ===== */
+canvas {
+    width: 100% !important;
+}
+
+.chart-box {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    height: 1100px;
+}
+
+/* ถ้าอยากให้ canvas สูงเต็มกล่อง */
+.chart-box canvas {
+    height: 100% !important;
+}
+
+/* ===== Table Styling ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+table th {
+    background: #6366f1;
+    color: #ffffff;
+    font-weight: 800;
+    text-align: left;
+}
+
+table th,
+table td {
+    padding: 14px 16px;
+}
+
+table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+table tr:hover {
+    background: #eef2ff;
+    transition: 0.2s;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+
+    .chart-box {
+        height: 300px;
+    }
+}

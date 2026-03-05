@@ -1,0 +1,227 @@
+<div class="container">
+
+    <h1>➕ เพิ่มคอนเสิร์ตใหม่</h1>
+
+    <div class="steps">
+        <span id="step1-indicator" class="active">Step 1: ข้อมูลหลัก</span>
+        →
+        <span id="step2-indicator">Step 2: เพิ่มรอบ</span>
+    </div>
+
+    <form action="/admin/concerts/add"
+          method="POST"
+          enctype="multipart/form-data">
+
+        <!-- ================= STEP 1 ================= -->
+        <div id="step1">
+
+            <label>ชื่อคอนเสิร์ต</label>
+            <input type="text" name="name" required>
+
+            <label>ศิลปิน</label>
+            <input type="text" name="artist" required>
+
+            <label for="location">สถานที่จัดคอนเสิร์ต</label>
+            <input type="text" id="location" name="location" placeholder="เช่น Impact Arena เมืองทองธานี" required>
+
+            <label>รายละเอียด</label>
+            <textarea name="description"></textarea>
+
+            <label>รูปภาพโปสเตอร์</label>
+            <input type="file"
+                   name="image"
+                   id="imageInput"
+                   accept="image/*"
+                   required>
+
+            <div style="margin-top:10px;">
+                <img id="previewImage"
+                     style="display:none; width:150px; border-radius:8px;">
+                <p id="previewText">ยังไม่ได้เลือกรูป</p>
+            </div>
+
+            <label>วันที่เริ่ม</label>
+            <input type="date" name="start_date" required>
+
+            <label>วันที่สิ้นสุด</label>
+            <input type="date" name="end_date" required>
+
+            <button type="button" onclick="nextStep()">
+                ถัดไป →
+            </button>
+
+        </div>
+
+        <!-- ================= STEP 2 ================= -->
+        <div id="step2" style="display:none;">
+
+            <h3>เพิ่มรอบการแสดง</h3>
+
+            <div class="round-inputs">
+                <input type="date" id="show_date">
+                <input type="time" id="show_time">
+                <input type="number" id="total_seats" placeholder="ที่นั่ง">
+                <input type="number" id="price" placeholder="ราคา">
+
+                <button type="button" onclick="addRound()">
+                    ➕ เพิ่มรอบ
+                </button>
+            </div>
+
+            <br>
+
+            <table border="1" width="100%">
+                <thead>
+                    <tr>
+                        <th>วันที่</th>
+                        <th>เวลา</th>
+                        <th>ที่นั่ง</th>
+                        <th>ราคา</th>
+                        <th>ลบ</th>
+                    </tr>
+                </thead>
+                <tbody id="roundTable"></tbody>
+            </table>
+
+            <br>
+
+            <button type="button" onclick="prevStep()">← กลับ</button>
+            <button type="submit">บันทึกทั้งหมด</button>
+
+        </div>
+
+    </form>
+</div>
+
+<script>
+
+let rounds = [];
+
+/* ---------- Step Control ---------- */
+
+function nextStep() {
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+
+    document.getElementById("step1-indicator").classList.remove("active");
+    document.getElementById("step2-indicator").classList.add("active");
+}
+
+function prevStep() {
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step1").style.display = "block";
+
+    document.getElementById("step2-indicator").classList.remove("active");
+    document.getElementById("step1-indicator").classList.add("active");
+}
+
+/* ---------- Image Preview ---------- */
+
+const imageInput = document.getElementById('imageInput');
+const previewImage = document.getElementById('previewImage');
+const previewText = document.getElementById('previewText');
+
+imageInput.addEventListener('change', function () {
+
+    const file = this.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = "block";
+            previewText.style.display = "none";
+        };
+
+        reader.readAsDataURL(file);
+
+    } else {
+        previewImage.style.display = "none";
+        previewText.style.display = "block";
+        previewImage.src = "";
+    }
+
+});
+
+/* ---------- Round System ---------- */
+
+function addRound() {
+
+    const show_date = document.getElementById("show_date").value;
+    const show_time = document.getElementById("show_time").value;
+    const total_seats = document.getElementById("total_seats").value;
+    const price = document.getElementById("price").value;
+
+    if (!show_date || !show_time || !total_seats || !price) {
+        alert("กรอกข้อมูลรอบให้ครบ");
+        return;
+    }
+
+    rounds.push({ show_date, show_time, total_seats, price });
+
+    renderTable();
+    createHiddenInputs();
+
+    document.getElementById("show_date").value = "";
+    document.getElementById("show_time").value = "";
+    document.getElementById("total_seats").value = "";
+    document.getElementById("price").value = "";
+}
+
+function renderTable() {
+
+    const table = document.getElementById("roundTable");
+    table.innerHTML = "";
+
+    rounds.forEach((r, index) => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${r.show_date}</td>
+            <td>${r.show_time}</td>
+            <td>${r.total_seats}</td>
+            <td>${r.price}</td>
+            <td>
+                <button type="button" onclick="deleteRound(${index})">ลบ</button>
+            </td>
+        `;
+
+        table.appendChild(row);
+    });
+}
+
+function deleteRound(index) {
+    rounds.splice(index, 1);
+    renderTable();
+    createHiddenInputs();
+}
+
+function createHiddenInputs() {
+
+    document.querySelectorAll(".hidden-round").forEach(el => el.remove());
+
+    const form = document.querySelector("form");
+
+    rounds.forEach((r, index) => {
+
+        const fields = [
+            { name: `rounds[${index}][show_date]`, value: r.show_date },
+            { name: `rounds[${index}][show_time]`, value: r.show_time },
+            { name: `rounds[${index}][total_seats]`, value: r.total_seats },
+            { name: `rounds[${index}][price]`, value: r.price }
+        ];
+
+        fields.forEach(field => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = field.name;
+            input.value = field.value;
+            input.classList.add("hidden-round");
+            form.appendChild(input);
+        });
+    });
+}
+
+</script>
