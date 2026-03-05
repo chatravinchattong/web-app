@@ -133,6 +133,8 @@ function showTab(e, tab) {
 
         <form method="POST" id="editForm">
 
+            <input type="hidden" name="concert_id" value="<%= concert.id %>">
+
             <label>วันที่</label>
             <input type="date" name="show_date" id="modal_date" required>
 
@@ -146,8 +148,8 @@ function showTab(e, tab) {
             <input type="number" name="price" id="modal_price" required>
 
             <div class="modal-actions">
-                <button type="submit" class="btn-primary">บันทึก</button>
-                <button type="button" onclick="closeModal()" class="btn-cancel">ยกเลิก</button>
+            <button type="submit" class="btn-primary">บันทึก</button>
+            <button type="button" onclick="closeModal()" class="btn-cancel">ยกเลิก</button>
             </div>
 
         </form>
@@ -167,7 +169,7 @@ function openAddModal() {
     document.getElementById("modal_price").value = "";
 
     document.getElementById("editForm").action =
-        "/admin/showtimes/create/<%= concert.id %>";
+        "/admin/showtimes/add";
 }
 </script>
 

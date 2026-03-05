@@ -855,7 +855,7 @@ app.post('/admin/concerts/update/:id',
 // DELETE CONCERT
 // ======================
 app.post('/admin/concerts/delete/:id', isAdmin, (req, res) => {
-
+    const concertId = row.concert_id;
     const id = req.params.id;
 
     db.run("DELETE FROM concerts WHERE id = ?", [id], () => {
@@ -874,9 +874,29 @@ app.post('/admin/showtimes/add', isAdmin, (req, res) => {
     db.run(
         "INSERT INTO showtimes (concert_id, show_date, show_time, total_seats, price) VALUES (?, ?, ?, ?, ?)",
         [concert_id, show_date, show_time, total_seats, price],
-        () => res.redirect('/admin/concerts/edit/' + concert_id)
+        function () {
+
+            const showtimeId = this.lastID;
+
+            for (let i = 1; i <= total_seats; i++) {
+
+                db.run(
+                    "INSERT INTO seats (showtime_id, seat_number, status) VALUES (?, ?, 'available')",
+                    [showtimeId, i]
+                );
+
+            }
+
+            res.redirect('/admin/concerts/edit/' + concert_id);
+
+        }
     );
+
 });
+
+// app.get('/admin/edit_concerts', isAdmin, (req, res) => {
+//     res.render('admin/edit_concerts');
+// });
 
 
 // ======================
@@ -891,28 +911,60 @@ app.post('/admin/showtimes/update/:id', isAdmin, (req, res) => {
 
         db.run("BEGIN TRANSACTION");
 
-        db.run(
-            "UPDATE showtimes SET show_date=?, show_time=?, total_seats=?, price=? WHERE id=?",
-            [show_date, show_time, total_seats, price, id]
+        db.get(
+            "SELECT total_seats, concert_id FROM showtimes WHERE id=?",
+            [id],
+            (err, row) => {
+
+                if (err || !row) {
+                    db.run("ROLLBACK");
+                    return res.send("Showtime not found");
+                }
+
+                const oldSeats = row.total_seats;
+                const concertId = row.concert_id; // ⭐ ดึง concert_id
+                const newSeats = parseInt(total_seats, 10);
+
+                db.run(
+                    "UPDATE showtimes SET show_date=?, show_time=?, total_seats=?, price=? WHERE id=?",
+                    [show_date, show_time, newSeats, price, id]
+                );
+
+                // เพิ่มที่นั่ง
+                if (newSeats > oldSeats) {
+
+                    for (let i = oldSeats + 1; i <= newSeats; i++) {
+
+                        db.run(
+                            "INSERT INTO seats (showtime_id, seat_number, status) VALUES (?, ?, 'available')",
+                            [id, i]
+                        );
+
+                    }
+
+                }
+
+                // ลดที่นั่ง
+                if (newSeats < oldSeats) {
+
+                    db.run(
+                        `DELETE FROM seats 
+                         WHERE showtime_id=? 
+                         AND seat_number > ?
+                         AND status='available'`,
+                        [id, newSeats]
+                    );
+
+                }
+
+                db.run("COMMIT");
+
+                // ⭐ redirect กลับหน้า concert เดิม
+                res.redirect('/admin/concerts/edit/' + concertId);
+
+            }
         );
 
-        // 🔥 ลบที่นั่งที่ยัง available ทั้งหมด
-        db.run(
-            "DELETE FROM seats WHERE showtime_id=? AND status='available'",
-            [id]
-        );
-
-        // 🔥 สร้างใหม่ตามจำนวนล่าสุด
-        for (let i = 1; i <= total_seats; i++) {
-            db.run(
-                "INSERT INTO seats (showtime_id, seat_number, status) VALUES (?, ?, 'available')",
-                [id, i]
-            );
-        }
-
-        db.run("COMMIT");
-
-        res.redirect('/admin/concerts');
     });
 
 });
